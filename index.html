@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forestry Plan Form</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <!-- iOS meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ForestryApp">
+    <!-- Link to icons for iOS -->
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <!-- Theme color for browsers -->
+    <meta name="theme-color" content="#2E8B57">
+</head>
+<body>
+
+    <form id="forestryForm">
+        <h1>Forestry Stewardship Plan</h1>
+
+        <!-- AREA / ACRES (Inline) -->
+        <div class="form-row">
+             <div class="form-group">
+                 <label for="area">AREA:</label>
+                 <input type="text" id="area" name="area"> <!-- Corresponds to #1 -->
+             </div>
+             <div class="form-group">
+                 <label for="acres">ACRES:</label>
+                 <input type="text" id="acres" name="acres"> <!-- Corresponds to #2 -->
+             </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label for="nrcsCountySelect">NRCS County (for Recommendations):</label>
+                <select id="nrcsCountySelect" name="nrcsCountySelect">
+                    <option value="" selected disabled>-- Select County --</option>
+                    <!-- Options will be populated by script.js -->
+                </select>
+            </div>
+        </div>
+
+        <fieldset>
+            <legend>MAJOR TREE SPECIES AND SIZE CLASS</legend>
+            <div class="form-group full-width">
+                <label for="majorSpecies">Primary Species:</label>
+                <input type="text" id="majorSpecies" name="majorSpecies" placeholder="e.g., White Oak, Red Maple"> <!-- Corresponds to #3 -->
+            </div>
+            <!-- Size class checkboxes inline -->
+            <div class="form-group full-width inline-label-group">
+                 <label class="inline-label">These are primarily:</label>
+                 <div class="checkbox-group horizontal inline-controls"> <!-- Corresponds to #4 -->
+                    <div><input type="checkbox" id="sizeClass1" name="sizeClass" value="poletimber (6-11” DBH)"><label for="sizeClass1">Poletimber</label></div>
+                    <div><input type="checkbox" id="sizeClass2" name="sizeClass" value="small sawtimber (12-17” DBH)"><label for="sizeClass2">Small</label></div>
+                    <div><input type="checkbox" id="sizeClass3" name="sizeClass" value="medium sawtimber (18-23” DBH)"><label for="sizeClass3">Medium</label></div>
+                    <div><input type="checkbox" id="sizeClass4" name="sizeClass" value="large sawtimber (24”+ DBH)"><label for="sizeClass4">Large</label></div>
+                 </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>STOCKING</legend>
+             <div class="form-group full-width">
+                 <label for="stockingLevel">This stand is:</label>
+                 <select id="stockingLevel" name="stockingLevel"> <!-- Corresponds to #5 -->
+                     <option value="" disabled selected>Select...</option>
+                     <option value="over">Over stocked</option>
+                     <option value="fully">Fully stocked</option>
+                     <option value="under">Under stocked</option>
+                 </select>
+             </div>
+            <!-- Stocking explanation radios (Hidden by CSS, controlled by JS) -->
+            <div id="stockingExplanationRadios" class="form-group full-width">
+                <p>Stocking explanation:</p>
+                <div class="radio-group vertical"> <!-- Changed from checkbox-group -->
+                    <!-- Name attribute must be the same for radio buttons -->
+                    <div><input type="radio" id="stockingExp1" name="stockingExplanation" value="Fully stocked"><label for="stockingExp1">Fully stocked indicates an optimal number of trees for growth and productivity.</label></div>
+                    <div><input type="radio" id="stockingExp2" name="stockingExplanation" value="Over stocked"><label for="stockingExp2">Over stocked indicated a greater than optimal number of trees for growth and productivity.</label></div>
+                    <div><input type="radio" id="stockingExp3" name="stockingExplanation" value="Under stocked"><label for="stockingExp3">Under stocked indicated fewer than optimal trees for growth and productivity.</label></div>
+                </div>
+            </div>
+             <!-- Horizontal fields for stocking details -->
+             <div class="form-row">
+                 <div class="form-group">
+                     <label for="treesPerAcre">Est. Trees/Acre:</label>
+                     <input type="text" id="treesPerAcre" name="treesPerAcre"> <!-- Corresponds to #7 -->
+                 </div>
+                 <div class="form-group">
+                     <label for="avgDbh">Avg. DBH (in):</label>
+                     <input type="text" id="avgDbh" name="avgDbh"> <!-- Corresponds to #8 -->
+                 </div>
+                 <div class="form-group">
+                     <label for="basalArea">Basal Area (sq.ft):</label>
+                     <input type="text" id="basalArea" name="basalArea"> <!-- Corresponds to #9 -->
+                 </div>
+             </div>
+             <!-- Removed "(See Reference A)" paragraph -->
+        </fieldset>
+
+        <fieldset>
+            <legend>FOREST STAND HEALTH</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="standHealth">Health:</label>
+                    <select id="standHealth" name="standHealth"> <!-- Corresponds to #10 -->
+                         <option value="" disabled selected>Select...</option>
+                         <option value="good">Good</option>
+                         <option value="fair">Fair</option>
+                         <option value="poor">Poor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                     <label for="invasiveSpecies">Scattered Invasives:</label>
+                     <input type="text" id="invasiveSpecies" name="invasiveSpecies" placeholder="e.g., Multiflora Rose"> <!-- Corresponds to #11 -->
+                </div>
+            </div>
+            <!-- Collapsible Health Notes -->
+            <div class="collapsible-section">
+                <div class="collapsible-header">
+                    <button type="button" class="toggle-notes">+</button>
+                    <label for="healthNotes">Health Notes:</label>
+                </div>
+                 <textarea id="healthNotes" name="healthNotes" class="notes-textarea"></textarea> <!-- Corresponds to #12 -->
+            </div>
+             <!-- Removed invasive species paragraph -->
+        </fieldset>
+
+        <fieldset>
+             <legend>TIMBER STAND QUALITY</legend>
+              <div class="form-group full-width">
+                 <label for="timberQuality">Quality:</label>
+                 <select id="timberQuality" name="timberQuality"> <!-- Corresponds to #13 -->
+                      <option value="" disabled selected>Select...</option>
+                      <option value="good">Good</option>
+                      <option value="fair">Fair</option>
+                      <option value="poor">Poor</option>
+                 </select>
+             </div>
+              <!-- Collapsible Quality Notes -->
+              <div class="collapsible-section">
+                  <div class="collapsible-header">
+                      <button type="button" class="toggle-notes">+</button>
+                      <label for="qualityNotes">Quality Notes:</label>
+                 </div>
+                 <textarea id="qualityNotes" name="qualityNotes" class="notes-textarea"></textarea> <!-- Corresponds to #14 -->
+             </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>REPRODUCTION AND SPECIES</legend>
+            <div class="form-group full-width">
+                <label for="regenSpecies">Reproduction (seedling/sapling):</label>
+                <input type="text" id="regenSpecies" name="regenSpecies" placeholder="e.g., Oak, Maple, Beech"> <!-- Corresponds to #15 -->
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>SITE QUALITY</legend>
+             <p class="compact-paragraph">Site index (height at age 50):</p>
+             <div class="form-row">
+                 <div class="form-group">
+                     <label for="whiteOakHeight">White Oak (ft):</label>
+                     <input type="text" id="whiteOakHeight" name="whiteOakHeight"> <!-- Corresponds to #16 -->
+                 </div>
+                 <div class="form-group">
+                     <label for="blackOakSI">Black Oak SI:</label>
+                     <input type="text" id="blackOakSI" name="blackOakSI"> <!-- Corresponds to #17 -->
+                 </div>
+                 <div class="form-group">
+                     <label for="yellowPoplarSI">Yellow Poplar SI:</label>
+                     <input type="text" id="yellowPoplarSI" name="yellowPoplarSI"> <!-- Corresponds to #18 -->
+                 </div>
+                 <div class="form-group">
+                    <label for="siteProductivity">Productivity:</label>
+                    <select id="siteProductivity" name="siteProductivity"> <!-- Corresponds to #19 -->
+                         <option value="" disabled selected>Select...</option>
+                         <option value="good">Good</option>
+                         <option value="fair">Fair</option>
+                         <option value="poor">Poor</option>
+                    </select>
+                </div>
+             </div>
+        </fieldset>
+
+        <fieldset>
+             <legend>SOIL TYPE</legend> <!-- Corresponds to #20 -->
+             <!-- Soil Radios Side by Side -->
+             <div class="radio-group soil-options-container">
+                 <!-- Option 1 Column -->
+                 <div class="soil-option-column">
+                     <input type="radio" id="soilOption1" name="soilOption" value="1" onclick="toggleSoilDetails(true)">
+                     <label for="soilOption1">Option 1: Single Soil</label>
+                     <div class="soil-details" id="soilDetails1">
+                         <div class="form-row nested-row">
+                              <div class="form-group flex-grow-2">
+                                  <label for="soilType1">Type:</label>
+                                  <input type="text" id="soilType1" name="soilType1"> <!-- Corresponds to #21 -->
+                              </div>
+                             <div class="form-group">
+                                 <label for="drainage1">Drainage:</label>
+                                 <input type="text" id="drainage1" name="drainage1" placeholder="well"> <!-- Corresponds to #22 -->
+                             </div>
+                             <div class="form-group">
+                                 <label for="runoff1">Runoff:</label>
+                                 <input type="text" id="runoff1" name="runoff1" placeholder="slow"> <!-- Corresponds to #23 -->
+                             </div>
+                             <div class="form-group">
+                                 <label for="permeability1">Perm:</label>
+                                 <input type="text" id="permeability1" name="permeability1" placeholder="mod"> <!-- Corresponds to #24 -->
+                            </div>
+                         </div>
+                    </div>
+                 </div>
+                 <!-- Option 2 Column -->
+                 <div class="soil-option-column">
+                     <input type="radio" id="soilOption2" name="soilOption" value="2" onclick="toggleSoilDetails(false)">
+                     <label for="soilOption2">Option 2: Multiple Soils</label>
+                      <div class="soil-details" id="soilDetails2">
+                         <div class="form-row nested-row">
+                              <div class="form-group flex-grow-2">
+                                  <label for="soilType2">Types:</label>
+                                  <input type="text" id="soilType2" name="soilType2"> <!-- Corresponds to #21 -->
+                              </div>
+                              <div class="form-group">
+                                 <label for="drainage2">Drainage:</label>
+                                 <input type="text" id="drainage2" name="drainage2" placeholder="well"> <!-- Corresponds to #22 -->
+                             </div>
+                             <div class="form-group">
+                                 <label for="runoff2">Runoff:</label>
+                                 <input type="text" id="runoff2" name="runoff2" placeholder="slow"> <!-- Corresponds to #23 -->
+                             </div>
+                             <div class="form-group">
+                                 <label for="permeability2">Perm:</label>
+                                 <input type="text" id="permeability2" name="permeability2" placeholder="mod"> <!-- Corresponds to #24 -->
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>STAND HISTORY</legend>
+             <div class="form-group full-width">
+                 <label for="lastHarvestAge">Last Harvest (yrs ago):</label>
+                 <input type="text" id="lastHarvestAge" name="lastHarvestAge"> <!-- Corresponds to #25 -->
+             </div>
+            <!-- Collapsible History Notes -->
+             <div class="collapsible-section">
+                 <div class="collapsible-header">
+                    <button type="button" class="toggle-notes">+</button>
+                    <label for="historyNotes">History Notes:</label>
+                 </div>
+                <textarea id="historyNotes" name="historyNotes" class="notes-textarea"></textarea> <!-- Corresponds to #26 -->
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>FOREST WILDLIFE CONDITIONS</legend> <!-- Corresponds to #27 -->
+            <div class="radio-group horizontal">
+                <div><input type="radio" id="wildlife1" name="wildlifeSuitability" value="Well suited"><label for="wildlife1">Well suited</label></div>
+                 <div><input type="radio" id="wildlife2" name="wildlifeSuitability" value="Not well suited now, potential future"><label for="wildlife2">Not well suited now, potential future</label></div>
+                 <div><input type="radio" id="wildlife3" name="wildlifeSuitability" value="Not well suited"><label for="wildlife3">Not well suited</label></div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>RECOMMENDATION</legend> <!-- Corresponds to #28 -->
+            <p class="compact-paragraph">Click the buttons below to add recommendations in the desired order.</p>
+
+            <!-- Container for dynamically generated recommendation buttons -->
+            <div id="recommendationButtonsContainer">
+                <!-- Categories and buttons will be inserted here by script.js -->
+            </div>
+
+             <div class="form-group full-width" style="margin-top: 15px;"> <!-- Added margin-top -->
+                 <label for="generatedRecommendations">Recommendation Text (Preview/Edit):</label>
+                 <textarea id="generatedRecommendations" name="generatedRecommendations" rows="15"></textarea> <!-- Increased rows -->
+             </div>
+        </fieldset>
+
+        <!-- START: Added PDF Selection Fieldset -->
+        <fieldset>
+            <legend>Attached Reference PDFs</legend>
+            <p class="compact-paragraph">Select the reference PDFs to be associated with this plan:</p>
+            <div id="pdfCheckboxesContainer" class="checkbox-group vertical">
+                <!-- Checkboxes will be populated by script.js -->
+            </div>
+        </fieldset>
+        <!-- END: Added PDF Selection Fieldset -->
+
+
+        <!-- Modal for Editing Template -->
+        <div id="editTemplateModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeTemplateModal">×</span>
+                <h2>Edit Base Template</h2>
+                <p>Modify the template used to generate the final text file. Placeholders like ${area} will be filled with form data.</p>
+                <textarea id="templateEditTextarea" rows="20"></textarea>
+                <div class="modal-actions">
+                    <button type="button" id="saveTemplateChangesButton">Save Changes</button>
+                    <button type="button" class="close-modal-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Viewing/Editing Final TXT -->
+        <div id="viewFinalTxtModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeFinalTxtModal">×</span>
+                <h2>Preview & Edit Final Text</h2>
+                <p>Review and edit the generated text before saving.</p>
+                <textarea id="finalTxtEditTextarea" rows="20"></textarea>
+                <div class="modal-actions">
+                    <button type="button" id="saveFinalTxtButton">Save and Download TXT</button>
+                    <button type="button" class="close-modal-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons at the bottom -->
+        <div class="form-actions">
+             <button type="button" id="editTemplateButton">Edit Template</button>
+             <button type="button" id="viewFinalTxtButton">View Final TXT</button>
+             <button type="button" id="submitButton">Save Form as TXT</button> <!-- Changed to type="button" -->
+        </div>
+
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
