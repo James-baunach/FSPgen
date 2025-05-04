@@ -52,23 +52,22 @@ ATTACHED REFERENCE PDFS:
     // --- List of Reference PDFs (Using Filenames) ---
     const referencePdfs = [
         // Reference A/B (Using placeholders as actual filenames might vary)
-        { name: "ReferenceA_Stocking_7-15.pdf", value: "ReferenceA_Stocking_7-15.pdf" }, // Example filename
-        { name: "ReferenceA_Stocking_3-7.pdf", value: "ReferenceA_Stocking_3-7.pdf" },   // Example filename
-        { name: "ReferenceB_TSI_Invasive.pdf", value: "ReferenceB_TSI_Invasive.pdf" },   // Example filename
-        // Guides from OCR
-        { name: "TreesAndShrubs_Planting.pdf", value: "TreesAndShrubs_Planting.pdf" },
-        { name: "TreeOfHeaven_Control.pdf", value: "TreeOfHeaven_Control.pdf" },
-        { name: "EdgeFeathering.pdf", value: "EdgeFeathering.pdf" },
-        { name: "WildflowerPlanting.pdf", value: "WildflowerPlanting.pdf" },
-        { name: "ProperPruning.pdf", value: "ProperPruning.pdf" },
-        { name: "MultifloraRose_Control.pdf", value: "MultifloraRose_Control.pdf" },
-        { name: "Paulownia_Control.pdf", value: "Paulownia_Control.pdf" },
-        { name: "Privet_Control.pdf", value: "Privet_Control.pdf" },
-        { name: "BushHoneysuckle_Control.pdf", value: "BushHoneysuckle_Control.pdf" },
-        { name: "JapaneseStiltgrass_Control.pdf", value: "JapaneseStiltgrass_Control.pdf" },
-        { name: "CalleryPear_Control.pdf", value: "CalleryPear_Control.pdf" },
-        { name: "WinterCreeper_Control.pdf", value: "WinterCreeper_Control.pdf" },
-        { name: "OrientalBittersweet_Control.pdf", value: "OrientalBittersweet_Control.pdf" }
+        { name: "Reference A - Large.pdf", value: "Reference A - Large.pdf" }, // Example filename
+        { name: "Reference A - Smalls.pdf", value: "Reference A - Smalls.pdf" },   // Example filename
+        { name: "Reference B - TSI Application Methods.pdf", value: "Reference B - TSI Application Methods.pdf" },   
+        { name: "General Planting.pdf", value: "General Planting.pdf" },
+        { name: "Tree-of-heaven.pdf", value: "Tree-of-heaven.pdf" },
+        { name: "Edge Feathering.pdf", value: "Edge Feathering.pdf" },
+        { name: "Wildflowers.pdf", value: "Wildflowers.pdf" },
+        { name: "Pruning Trees.pdf", value: "Pruning Trees.pdf" },
+        { name: "Multiflora Rose.pdf", value: "Multiflora Rose.pdf" },
+        { name: "Paulownia.pdf", value: "Paulownia.pdf" },
+        { name: "Chinese Privet.pdf", value: "Chinese Privet.pdf" },
+        { name: "Bush Honeysuckle.pdf", value: "Bush Honeysuckle.pdf" },
+        { name: "Japanese Stiltgrass.pdf", value: "Japanese Stiltgrass.pdf" },
+        { name: "Callery Pear.pdf", value: "Callery Pear.pdf" },
+        { name: "Winter Creeper.pdf", value: "Winter Creeper.pdf" },
+        { name: "Oriental Bittersweet.pdf", value: "Oriental Bittersweet.pdf" }
         // Add any other actual PDF filenames here
     ];
 
