@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fsp-form-cache-v4'; // Increment version if you change cached files
+const CACHE_NAME = 'fsp-form-cache-v5'; // Increment version if you change cached files
 const urlsToCache = [
   '.', // Alias for index.html
   'index.html',
