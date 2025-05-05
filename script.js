@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Base Template Definition (Titles NOT bolded) ---
-    // Added ${invasiveTreatmentNote} and ${selectedPdfs} placeholders
+    // --- Base Template Definition ---
     let baseTemplate = `AREA: \${area || '[N/A]'}\t\t\t\t\t\t\tACRES: \${acres || '[N/A]'}
 
 MAJOR TREE SPECIES AND SIZE CLASS:
@@ -49,28 +48,25 @@ ATTACHED REFERENCE PDFS:
 \${selectedPdfs || '[None Selected]'}
 `;
 
-    // --- List of Reference PDFs (Using Filenames) ---
+    // --- List of Reference PDFs ---
     const referencePdfs = [
-        // Reference A/B (Using placeholders as actual filenames might vary)
-        { name: "Reference A - Large.pdf", value: "Reference A - Large.pdf" }, // Example filename
-        { name: "Reference A - Smalls.pdf", value: "Reference A - Smalls.pdf" },   // Example filename
-        { name: "Reference B - TSI Application Methods.pdf", value: "Reference B - TSI Application Methods.pdf" },   
-        { name: "General Planting.pdf", value: "General Planting.pdf" },
-        { name: "Tree-of-heaven.pdf", value: "Tree-of-heaven.pdf" },
-        { name: "Edge Feathering.pdf", value: "Edge Feathering.pdf" },
-        { name: "Wildflowers.pdf", value: "Wildflowers.pdf" },
-        { name: "Pruning Trees.pdf", value: "Pruning Trees.pdf" },
-        { name: "Multiflora Rose.pdf", value: "Multiflora Rose.pdf" },
-        { name: "Paulownia.pdf", value: "Paulownia.pdf" },
-        { name: "Chinese Privet.pdf", value: "Chinese Privet.pdf" },
-        { name: "Bush Honeysuckle.pdf", value: "Bush Honeysuckle.pdf" },
-        { name: "Japanese Stiltgrass.pdf", value: "Japanese Stiltgrass.pdf" },
-        { name: "Callery Pear.pdf", value: "Callery Pear.pdf" },
-        { name: "Winter Creeper.pdf", value: "Winter Creeper.pdf" },
-        { name: "Oriental Bittersweet.pdf", value: "Oriental Bittersweet.pdf" }
-        // Add any other actual PDF filenames here
+        { name: "Reference A - Large", value: "Reference A - Large.pdf" },
+        { name: "Reference A - Smalls", value: "Reference A - Smalls.pdf" },
+        { name: "Reference B - TSI Application Methods", value: "Reference B - TSI Application Methods.pdf" },
+        { name: "General Planting", value: "General Planting.pdf" },
+        { name: "Tree-of-heaven", value: "Tree-of-heaven.pdf" },
+        { name: "Edge Feathering", value: "Edge Feathering.pdf" },
+        { name: "Wildflowers", value: "Wildflowers.pdf" },
+        { name: "Pruning Trees", value: "Pruning Trees.pdf" },
+        { name: "Multiflora Rose", value: "Multiflora Rose.pdf" },
+        { name: "Paulownia", value: "Paulownia.pdf" },
+        { name: "Chinese Privet", value: "Chinese Privet.pdf" },
+        { name: "Bush Honeysuckle", value: "Bush Honeysuckle.pdf" },
+        { name: "Japanese Stiltgrass", value: "Japanese Stiltgrass.pdf" },
+        { name: "Callery Pear", value: "Callery Pear.pdf" },
+        { name: "Winter Creeper", value: "Winter Creeper.pdf" },
+        { name: "Oriental Bittersweet", value: "Oriental Bittersweet.pdf" }
     ];
-
 
     // --- Structured Canned Recommendations ---
     const allRecommendations = {
@@ -249,11 +245,11 @@ ATTACHED REFERENCE PDFS:
 
 
     // --- State Variables ---
-    let selectedRecTitles = []; // Stores titles of selected recommendations IN ORDER
-    let placeholderValues = {}; // Stores user input for GENERIC placeholders { "Placeholder Text": "User Input" }
-    let flatRecList = {}; // Stores original text { "Rec Title": "Original Text..." }
+    let selectedRecTitles = [];
+    let placeholderValues = {};
+    let flatRecList = {};
 
-    // Full wildlife descriptions
+    // --- Descriptions & Data ---
     const wildlifeDescriptions = {
         "Well suited": `The area is well suited for wildlife. Forest conditions provide food and cover resources for wildlife throughout the year. It has a mixture of oaks and hickories that are producing hard mast (nuts), an essential food resource that many wildlife species depend upon during fall and winter months. The interior woodland understory includes a variety of shrubs, vines, briers, and forbs. Edges are dense, providing habitat diversity, woody and herbaceous browse, soft mast (berries), and cover for wildlife.`,
         "Not well suited now, potential future": `The area is not well suited for wildlife at the moment but has the potential to provide hard mast in the future. The interior woodland understory includes a variety of shrubs, vines, briers, and forbs. Edges are dense, providing habitat diversity, woody and herbaceous browse, soft mast (berries), and cover for wildlife.`,
@@ -264,26 +260,21 @@ ATTACHED REFERENCE PDFS:
         "Over stocked": "Over stocked indicated a greater than optimal number of trees for growth and productivity.",
         "Under stocked": "Under stocked indicated fewer than optimal trees for growth and productivity."
     };
-
-    // --- County NRCS Info ---
     const countyNrcsInfo = {
-        "Simpson County": "(270) 586-4732",
-        "Allen County": "(270) 237-3180",
-        "Barren County": "(270) 629-6811",
-        "Warren County": "(270) 843-1111",
-        "Hart County": "(270) 524-5631"
-        // Add more counties and numbers as needed
+        "Simpson": "(270) 586-4732", "Allen": "(270) 237-3180",
+        "Barren": "(270) 629-6811", "Warren": "(270) 843-1111",
+        "Hart": "(270) 524-5631"
     };
 
-    // --- Get DOM Elements ---
+    // --- Get DOM Elements (Declare ALL here for clarity) ---
     const form = document.getElementById('forestryForm');
     const recTextarea = document.getElementById('generatedRecommendations');
     const editTemplateButton = document.getElementById('editTemplateButton');
     const viewFinalTxtButton = document.getElementById('viewFinalTxtButton');
-    const submitButton = document.getElementById('submitButton');
+    const submitButton = document.getElementById('submitButton'); // TXT save button
     const stockingLevelDropdown = document.getElementById('stockingLevel');
     const recButtonsContainer = document.getElementById('recommendationButtonsContainer');
-    const nrcsCountySelect = document.getElementById('nrcsCountySelect'); // County Dropdown
+    const nrcsCountySelect = document.getElementById('nrcsCountySelect');
     const editTemplateModal = document.getElementById('editTemplateModal');
     const viewFinalTxtModal = document.getElementById('viewFinalTxtModal');
     const templateEditTextarea = document.getElementById('templateEditTextarea');
@@ -295,7 +286,9 @@ ATTACHED REFERENCE PDFS:
     const cancelTemplateModalButtons = editTemplateModal.querySelectorAll('.close-modal-button');
     const cancelFinalTxtModalButtons = viewFinalTxtModal.querySelectorAll('.close-modal-button');
     const noteToggleButtons = document.querySelectorAll('.toggle-notes');
-    const pdfCheckboxesContainer = document.getElementById('pdfCheckboxesContainer'); // Added
+    const pdfCheckboxesContainer = document.getElementById('pdfCheckboxesContainer');
+    const downloadPdfsButton = document.getElementById('downloadPdfsButton'); // PDF zip download button
+    const pdfDownloadStatus = document.getElementById('pdfDownloadStatus'); // PDF zip download status
 
     // --- Helper Functions ---
     function getElementValue(id) {
@@ -314,532 +307,9 @@ ATTACHED REFERENCE PDFS:
         if (!items || items.length === 0) { return defaultText; }
         if (items.length === 1) { return items[0]; }
         if (items.length === 2) { return `${items[0]} and ${items[1]}`; }
-        const lastItem = items[items.length - 1];
-        const otherItems = items.slice(0, -1);
-        return `${otherItems.join(', ')}, and ${lastItem}`;
+        return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
     }
-
-    // --- Helper to process placeholders (SIMPLIFIED for County/NRCS dropdown) ---
-    function processPlaceholders(text, placeholderStorage, selectedCounty, nrcsData) {
-        // console.log("Processing text snippet:", text.substring(0, 100) + "...");
-        const placeholderRegex = /\[\[(.*?)\]\]/g; // Match [[...]]
-        let match;
-        let processedText = text;
-        let continueProcessing = true;
-        const uniquePlaceholdersInThisText = new Map();
-
-        // --- Step 1: Find all matches ---
-        const matches = [];
-        placeholderRegex.lastIndex = 0;
-        while ((match = placeholderRegex.exec(text)) !== null) {
-            matches.push({ full: match[0], innerTrimmed: match[1].trim() });
-        }
-        // if (matches.length > 0) console.log(`Found ${matches.length} placeholder matches.`);
-
-        // --- Step 2: Determine values for all unique placeholders in this text block ---
-        for (const matchInfo of matches) {
-            const placeholderText = matchInfo.innerTrimmed;
-
-            // Skip if already processed *for this specific text block*
-            if (uniquePlaceholdersInThisText.has(placeholderText)) {
-                continue;
-            }
-
-            let valueForThisBlock = null; // Value to use for replacement
-
-            // --- Special Handling for County/Phone using the Dropdown Value ---
-            if (placeholderText === "(Insert County Name)") {
-                valueForThisBlock = selectedCounty || `[[${placeholderText}]]`; // Use selected county or keep placeholder
-                // console.log(`Applying County value from dropdown: "${valueForThisBlock}"`);
-            } else if (placeholderText === "(Insert NRCS Phone Number)") {
-                if (selectedCounty && nrcsData.hasOwnProperty(selectedCounty)) {
-                    valueForThisBlock = nrcsData[selectedCounty]; // Use lookup value
-                    // console.log(`Applying Phone value from dropdown lookup: "${valueForThisBlock}"`);
-                } else {
-                    valueForThisBlock = `[[${placeholderText}]]`; // Keep placeholder if no county selected or county not found
-                    // console.warn(`Cannot determine phone number. County selected: "${selectedCounty}"`);
-                }
-            } else {
-                // --- Handle Generic Placeholders ---
-                const storedGenericValue = placeholderStorage[placeholderText];
-                // console.log(`Checking global storage for generic "${placeholderText}": Value = "${storedGenericValue}"`);
-
-                if (storedGenericValue !== undefined && storedGenericValue !== null) {
-                    valueForThisBlock = storedGenericValue;
-                    // console.log(`Using stored value for generic "${placeholderText}": "${valueForThisBlock}"`);
-                } else if (storedGenericValue === null) {
-                    // This means a previous generic prompt for this was cancelled session-wide
-                    console.warn(`Generic placeholder "${placeholderText}" previously cancelled globally. Cancelling block.`);
-                    continueProcessing = false; // Cancel processing the entire block
-                    break; // Exit the for loop
-                } else {
-                    // Prompt for generic placeholder
-                    // console.log(`Prompting for generic placeholder: "${placeholderText}"`);
-                    const userInput = prompt(`Please provide value for:\n"${placeholderText}"`);
-                    if (userInput === null) {
-                        console.warn(`User cancelled prompt for generic "${placeholderText}"`);
-                        continueProcessing = false; // Cancel processing the entire block
-                        // Optional: Store cancellation globally so it's not asked again this session
-                        // placeholderStorage[placeholderText] = null;
-                        break; // Exit the for loop
-                    } else {
-                        valueForThisBlock = userInput;
-                        placeholderStorage[placeholderText] = valueForThisBlock; // Store globally
-                        // console.log(`Stored value "${valueForThisBlock}" for generic "${placeholderText}" globally.`);
-                    }
-                }
-            }
-            // Store the determined value for this placeholder for this specific call
-            uniquePlaceholdersInThisText.set(placeholderText, valueForThisBlock);
-
-             // Break outer loop immediately if a cancellation happened inside
-            if (!continueProcessing) break;
-        }
-        // console.log("Finished determining values. Continue Processing:", continueProcessing);
-        // console.log("Values determined for this call:", uniquePlaceholdersInThisText);
-
-
-        // --- Step 3: Replace placeholders if not cancelled ---
-        if (continueProcessing) {
-            // console.log("Entering replacement phase...");
-            uniquePlaceholdersInThisText.forEach((userInput, placeholderText) => {
-                // Replacement value is already determined in the map.
-                // If it resolved to the placeholder itself (e.g. county not selected), it stays.
-                const replacementValue = userInput; // Directly use the value from the map
-                const escapedPlaceholderText = placeholderText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const specificPlaceholderRegex = new RegExp(`\\[\\[\\s*${escapedPlaceholderText}\\s*\\]\\]`, 'g');
-                processedText = processedText.replace(specificPlaceholderRegex, replacementValue);
-            });
-            // console.log("--- processPlaceholders END (Success) ---");
-            return { text: processedText, cancelled: false };
-        } else {
-            console.warn("--- processPlaceholders END (Cancelled by user prompt) ---");
-            return { text: text, cancelled: true }; // Return original text and cancelled flag
-        }
-    }
-
-
-    // --- Regenerate the recommendation textarea ---
-    function regenerateRecTextarea() {
-        // console.log("Regenerating textarea from selected titles:", selectedRecTitles);
-        let output = [];
-        let processingErrorOccurred = false; // Flag if any placeholder step fails during regeneration
-
-        // Get the currently selected county from the dropdown *once*
-        const currentSelectedCounty = nrcsCountySelect ? nrcsCountySelect.value : "";
-        // console.log("Using County from dropdown:", currentSelectedCounty || "[Not Selected]");
-
-        selectedRecTitles.forEach(title => {
-            if (processingErrorOccurred) return;
-
-            const originalText = flatRecList[title];
-            if (originalText) {
-                // Pass the selected county and NRCS data to the processor
-                const { text: processedText, cancelled } = processPlaceholders(
-                    originalText,
-                    placeholderValues, // Global storage for generic placeholders
-                    currentSelectedCounty,
-                    countyNrcsInfo
-                );
-
-                if (!cancelled) {
-                    output.push(processedText);
-                } else {
-                    // This typically means a generic prompt was cancelled during regeneration
-                    console.error(`Placeholder processing cancelled during regeneration for "${title}". Removing item.`);
-                    processingErrorOccurred = true;
-                    const button = recButtonsContainer.querySelector(`.rec-button[data-title="${title}"]`);
-                    if (button) button.classList.remove('selected');
-                    // Update selectedRecTitles immediately within the loop might be tricky, filter after.
-                }
-            } else {
-                console.warn(`Original text not found for title: "${title}" during regeneration.`);
-            }
-        });
-
-        // If an error occurred (like cancellation), filter the master list based on button state
-        if (processingErrorOccurred) {
-            selectedRecTitles = selectedRecTitles.filter(title => {
-                const button = recButtonsContainer.querySelector(`.rec-button[data-title="${title}"]`);
-                // Keep only titles whose buttons are still marked as selected
-                return button && button.classList.contains('selected');
-            });
-             console.log("Corrected selected titles after regeneration error:", selectedRecTitles);
-        }
-
-        recTextarea.value = output.join('\n\n');
-        if(recTextarea.value) recTextarea.scrollTop = recTextarea.scrollHeight;
-    }
-
-    // --- Populate the County Dropdown ---
-    function populateCountyDropdown() {
-        if (!nrcsCountySelect) {
-             console.warn("County select dropdown not found.");
-             return;
-        }
-
-        // Clear existing options except the default disabled one
-        while (nrcsCountySelect.options.length > 1) {
-            nrcsCountySelect.remove(1);
-        }
-
-        Object.keys(countyNrcsInfo).sort().forEach(countyName => {
-            const option = document.createElement('option');
-            option.value = countyName;
-            option.textContent = countyName;
-            nrcsCountySelect.appendChild(option);
-        });
-         console.log("County dropdown populated.");
-    }
-
-
-    // --- Function to Populate PDF Checkboxes (WITH DOWNLOAD LINKS) ---
-    function populatePdfCheckboxes() {
-        if (!pdfCheckboxesContainer) {
-            console.error("PDF checkbox container not found.");
-            return;
-        }
-        pdfCheckboxesContainer.innerHTML = ''; // Clear existing
-        referencePdfs.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically by filename
-
-        referencePdfs.forEach(pdf => {
-            const div = document.createElement('div');
-            div.style.marginBottom = '5px'; // Add spacing between lines
-
-            // Create Checkbox
-            const safeIdValue = pdf.value.replace(/[^a-zA-Z0-9_-]/g, '_');
-            const checkboxId = `pdf_${safeIdValue}`;
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = checkboxId;
-            checkbox.name = 'referencePdf';
-            checkbox.value = pdf.value; // Store the filename
-            checkbox.style.marginRight = '5px';
-
-            // Create Label
-            const label = document.createElement('label');
-            label.htmlFor = checkboxId;
-            label.textContent = pdf.name; // Display filename
-            label.style.marginRight = '10px';
-
-            // Create Download Link
-            const link = document.createElement('a');
-            link.href = `pdfs/${pdf.value}`; // Relative path to the PDF
-            link.textContent = '[Download]';
-            link.target = '_blank'; // Open in new tab/window
-            link.rel = 'noopener noreferrer'; // Security best practice for target="_blank"
-            link.style.fontSize = '0.85em'; // Make link slightly smaller
-            link.style.textDecoration = 'none';
-            link.style.color = '#2E8B57'; // Theme color
-
-
-            // Append elements to the div
-            div.appendChild(checkbox);
-            div.appendChild(label);
-            div.appendChild(link); // Add the link after the label
-
-            pdfCheckboxesContainer.appendChild(div);
-        });
-        console.log("PDF checkboxes with download links populated.");
-    }
-
-    // --- Function to Toggle Soil Details Visibility ---
-    window.toggleSoilDetails = function(showOption1) {
-        const details1 = document.getElementById('soilDetails1');
-        const details2 = document.getElementById('soilDetails2');
-        if (details1 && details2) {
-            details1.style.display = showOption1 ? 'block' : 'none';
-            details2.style.display = !showOption1 ? 'block' : 'none';
-        }
-    };
-    // Initial call to set visibility based on any pre-selected radio
-    const initialSoilOption = getRadioValue('soilOption');
-    if (initialSoilOption === '1') { toggleSoilDetails(true); }
-    else if (initialSoilOption === '2') { toggleSoilDetails(false); }
-    else { // Default hide both if neither is selected
-        const details1 = document.getElementById('soilDetails1');
-        const details2 = document.getElementById('soilDetails2');
-        if (details1) details1.style.display = 'none';
-        if (details2) details2.style.display = 'none';
-    }
-
-
-    // --- Link Stocking Dropdown to Hidden Radio Buttons ---
-    if (stockingLevelDropdown) {
-        stockingLevelDropdown.addEventListener('change', () => {
-            const selectedValue = stockingLevelDropdown.value;
-            let targetRadioValue = '';
-            if (selectedValue === 'fully') { targetRadioValue = 'Fully stocked'; }
-            else if (selectedValue === 'over') { targetRadioValue = 'Over stocked'; }
-            else if (selectedValue === 'under') { targetRadioValue = 'Under stocked'; }
-
-            const radios = document.querySelectorAll(`#stockingExplanationRadios input[name="stockingExplanation"]`);
-            let found = false;
-            radios.forEach(radio => {
-                if (radio.value === targetRadioValue) {
-                    radio.checked = true;
-                    found = true;
-                } else {
-                    radio.checked = false;
-                }
-            });
-             if (!found) { // If value is empty ensure all are unchecked
-                  radios.forEach(radio => radio.checked = false);
-             }
-        });
-        // Trigger change on load to set initial state
-        stockingLevelDropdown.dispatchEvent(new Event('change'));
-    }
-
-    // --- Collapsible Notes Sections Logic ---
-    noteToggleButtons.forEach(button => {
-        const textarea = button.closest('.collapsible-section').querySelector('.notes-textarea');
-        if (textarea) {
-             // Simplified: Always start closed unless specifically styled otherwise via CSS
-             textarea.style.display = 'none';
-             button.textContent = '+';
-        }
-        button.addEventListener('click', () => {
-            const section = button.closest('.collapsible-section');
-            const txtArea = section.querySelector('.notes-textarea');
-            if (txtArea) {
-                const isHidden = txtArea.style.display === 'none' || !txtArea.style.display;
-                txtArea.style.display = isHidden ? 'block' : 'none';
-                button.textContent = isHidden ? '−' : '+';
-            }
-        });
-        const label = button.closest('.collapsible-header').querySelector('label');
-        if (label) {
-            label.style.cursor = 'pointer';
-            label.addEventListener('click', () => button.click()); // Make label trigger button click
-        }
-    });
-
-    // --- Populate Recommendation Buttons and Handle Clicks ---
-    function populateRecommendationButtons() {
-        // Check if allRecommendations is defined before proceeding
-        if (typeof allRecommendations === 'undefined' || !allRecommendations || Object.keys(allRecommendations).length === 0) {
-             console.warn("WARNING: The 'allRecommendations' object is empty or not defined. Recommendation buttons cannot be created.");
-             if(recButtonsContainer) { recButtonsContainer.innerHTML = '<p style="color: orange; font-weight: bold;">No recommendations available.</p>'; }
-             flatRecList = {}; // Ensure flat list is empty
-             return; // Stop execution of this function
-        }
-
-        if (!recButtonsContainer) return;
-        recButtonsContainer.innerHTML = '';
-
-        // Populate flatRecList with original texts
-        flatRecList = {}; // Reset
-        Object.values(allRecommendations).forEach(categoryRecs => {
-            if (Array.isArray(categoryRecs)) { // Ensure it's an array
-                categoryRecs.forEach(rec => {
-                    if (rec && rec.title) { // Check if rec and title exist
-                        flatRecList[rec.title] = rec.text || ''; // Use empty string if text is missing
-                    } else {
-                        console.warn("Found recommendation object without title:", rec);
-                    }
-                });
-            }
-        });
-
-
-        for (const category in allRecommendations) {
-            if (!Array.isArray(allRecommendations[category]) || allRecommendations[category].length === 0) continue; // Skip empty categories
-
-            const categoryHeader = document.createElement('h4');
-            categoryHeader.textContent = category;
-            categoryHeader.classList.add('rec-category-header', 'expanded'); // Start expanded
-
-            const buttonGroup = document.createElement('div');
-            buttonGroup.classList.add('rec-button-group');
-            // Start expanded - if you want them collapsed by default, add style="display: none;" here
-            buttonGroup.style.display = 'flex';
-
-
-            allRecommendations[category].forEach(rec => {
-                if (!rec || !rec.title) return; // Skip if recommendation or title is missing
-
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.classList.add('rec-button');
-                button.textContent = rec.title;
-                button.dataset.title = rec.title;
-                button.title = rec.text || 'No description available'; // Hover tooltip
-                if (selectedRecTitles.includes(rec.title)) button.classList.add('selected');
-                buttonGroup.appendChild(button);
-            });
-
-            // Add click listener for collapsing/expanding
-            categoryHeader.addEventListener('click', function() {
-                const group = this.nextElementSibling;
-                if (group && group.classList.contains('rec-button-group')) {
-                     const isCurrentlyExpanded = this.classList.contains('expanded');
-                     if (isCurrentlyExpanded) {
-                         group.style.display = 'none';
-                         this.classList.remove('expanded');
-                     } else {
-                         group.style.display = 'flex';
-                         this.classList.add('expanded');
-                     }
-                 }
-            });
-
-            recButtonsContainer.appendChild(categoryHeader);
-            recButtonsContainer.appendChild(buttonGroup);
-        }
-
-        // Add event listener using delegation for buttons
-        recButtonsContainer.addEventListener('click', (event) => {
-            const targetButton = event.target;
-            if (targetButton.classList.contains('rec-button')) {
-                const title = targetButton.dataset.title;
-                const isSelected = targetButton.classList.contains('selected');
-
-                if (isSelected) {
-                    // --- DESELECTING ---
-                    // console.log(`Deselecting: "${title}"`);
-                    targetButton.classList.remove('selected');
-                    selectedRecTitles = selectedRecTitles.filter(t => t !== title);
-                    regenerateRecTextarea();
-                } else {
-                    // --- SELECTING ---
-                    // console.log(`Selecting: "${title}"`);
-                    const originalText = flatRecList[title];
-                    if (originalText !== undefined) { // Check if exists, even if empty
-                        // Add title to the ordered list
-                        if (!selectedRecTitles.includes(title)) selectedRecTitles.push(title);
-                        targetButton.classList.add('selected');
-                        // Regenerate - this will process placeholders including any potential *new* generic prompts
-                        regenerateRecTextarea();
-
-                        // Check if regeneration caused this button to become deselected (due to generic prompt cancel)
-                        if (!targetButton.classList.contains('selected')) {
-                             console.log(`Selection cancelled for "${title}" during regeneration (likely generic prompt cancelled).`);
-                              targetButton.style.backgroundColor = '#f8d7da'; // Optional feedback
-                              setTimeout(() => { targetButton.style.backgroundColor = ''; }, 800);
-                         }
-                    } else {
-                        console.warn(`Original text not found for title: "${title}"`);
-                    }
-                }
-            }
-        });
-    }
-
-    // --- Initial Population Calls ---
-    populateCountyDropdown();
-    populateRecommendationButtons();
-    populatePdfCheckboxes(); // <-- Call the new function here
-
-    // --- Text File Generation and Download Logic ---
-    function generateFinalText() {
-        const data = {
-            // --- Keep all existing form field values ---
-            area: getElementValue('area'),
-            acres: getElementValue('acres'),
-            majorSpecies: getElementValue('majorSpecies'),
-            selectedSizeClasses: getCheckedValuesArray('sizeClass'),
-            stockingLevel: getElementValue('stockingLevel'),
-            selectedStockingExplanation: getRadioValue('stockingExplanation'),
-            treesPerAcre: getElementValue('treesPerAcre'),
-            avgDbh: getElementValue('avgDbh'),
-            basalArea: getElementValue('basalArea'),
-            standHealth: getElementValue('standHealth'),
-            invasiveSpecies: getElementValue('invasiveSpecies'),
-            healthNotes: getElementValue('healthNotes'),
-            timberQuality: getElementValue('timberQuality'),
-            qualityNotes: getElementValue('qualityNotes'),
-            regenSpecies: getElementValue('regenSpecies'),
-            whiteOakHeight: getElementValue('whiteOakHeight'),
-            blackOakSI: getElementValue('blackOakSI'),
-            yellowPoplarSI: getElementValue('yellowPoplarSI'),
-            siteProductivity: getElementValue('siteProductivity'),
-            soilOption: getRadioValue('soilOption'),
-            soilType: getRadioValue('soilOption') === '1' ? getElementValue('soilType1') : getElementValue('soilType2'),
-            drainage: getRadioValue('soilOption') === '1' ? getElementValue('drainage1') : getElementValue('drainage2'),
-            runoff: getRadioValue('soilOption') === '1' ? getElementValue('runoff1') : getElementValue('runoff2'),
-            permeability: getRadioValue('soilOption') === '1' ? getElementValue('permeability1') : getElementValue('permeability2'),
-            lastHarvestAge: getElementValue('lastHarvestAge'),
-            historyNotes: getElementValue('historyNotes'),
-            wildlifeValue: getRadioValue('wildlifeSuitability'),
-            finalRecommendations: recTextarea.value.trim() || '[No recommendations added.]', // Still get from textarea
-
-            // --- Add selected PDFs ---
-            selectedPdfNames: getCheckedValuesArray('referencePdf') // Get filenames from checked values
-        };
-
-        // --- Build composite text sections ---
-        data.sizeClassText = formatListWithCommasAndAnd(data.selectedSizeClasses, '[No size class selected]');
-        data.stockingExplanationText = data.selectedStockingExplanation
-            ? (stockingExplanationDescriptions[data.selectedStockingExplanation] || data.selectedStockingExplanation)
-            : '[No stocking explanation selected]';
-        if (data.soilOption === '1') { data.soilSectionText = `The primary soil type in this area is ${data.soilType || '[N/A]'}. This soil type is ${data.drainage || '[N/A]'} drained with ${data.runoff || '[N/A]'} runoff and ${data.permeability || '[N/A]'} permeability.`; }
-        else if (data.soilOption === '2') { data.soilSectionText = `The primary soil types in this area are ${data.soilType || '[N/A]'}. This soil type is ${data.drainage || '[N/A]'} drained with ${data.runoff || '[N/A]'} runoff and ${data.permeability || '[N/A]'} permeability.`; }
-        else { data.soilSectionText = '[No soil option selected]'; }
-        data.wildlifeSectionText = data.wildlifeValue
-            ? (wildlifeDescriptions[data.wildlifeValue] || data.wildlifeValue)
-            : '[No wildlife condition selected]';
-        data.invasiveTreatmentNote = data.invasiveSpecies ? "Invasive species should be treated as soon as feasible and the area monitored for additional spread." : "";
-
-        // Format selected PDFs list for the template
-        if (data.selectedPdfNames && data.selectedPdfNames.length > 0) {
-            // Use the actual filenames, prefixed with a bullet
-            data.selectedPdfs = data.selectedPdfNames.map(filename => `• ${filename}`).join('\n');
-        } else {
-            data.selectedPdfs = '[None Selected]';
-        }
-
-        // --- Template substitution logic ---
-        let finalText = baseTemplate;
-        const replacePlaceholder = (text, key, value, defaultValue = '[N/A]') => {
-             const regex = new RegExp(`\\$\\{\\s*${key}\\s*(\\|\\|.*?)?\\s*\\}`, 'g');
-             const useValue = (value !== undefined && value !== null);
-             // Adjust allowEmpty list if necessary
-             const allowEmpty = ['healthNotes', 'qualityNotes', 'historyNotes', 'invasiveTreatmentNote', 'finalRecommendations', 'selectedPdfs'].includes(key);
-             let replacement = defaultValue;
-             if (useValue) {
-                 if (allowEmpty || value !== '') { replacement = value; }
-             } else if (allowEmpty) { replacement = ''; }
-             // Provide specific default for selectedPdfs if it's empty/null and not caught above
-             if (key === 'selectedPdfs' && !replacement && defaultValue === '[N/A]') {
-                  replacement = '[None Selected]';
-             }
-             // Ensure boolean false is replaced correctly if needed for some future placeholder
-             if (value === false) {
-                 replacement = 'false';
-             }
-             return text.replace(regex, replacement);
-         };
-
-        // Loop through data keys, excluding the raw PDF names array and composite source fields
-        Object.keys(data).forEach(key => {
-            if (!['selectedSizeClasses', 'selectedStockingExplanation', 'soilOption', 'soilType', 'drainage', 'runoff', 'permeability', 'wildlifeValue', 'selectedPdfNames'].includes(key)) {
-                finalText = replacePlaceholder(finalText, key, data[key]);
-            }
-        });
-        // Replace composite fields specifically
-        finalText = replacePlaceholder(finalText, 'sizeClassText', data.sizeClassText, '[No size class selected]');
-        finalText = replacePlaceholder(finalText, 'stockingExplanationText', data.stockingExplanationText, '[No stocking explanation selected]');
-        finalText = replacePlaceholder(finalText, 'soilSectionText', data.soilSectionText, '[No soil option selected]');
-        finalText = replacePlaceholder(finalText, 'wildlifeSectionText', data.wildlifeSectionText, '[No wildlife condition selected]');
-        finalText = replacePlaceholder(finalText, 'invasiveTreatmentNote', data.invasiveTreatmentNote, '');
-        finalText = replacePlaceholder(finalText, 'selectedPdfs', data.selectedPdfs, '[None Selected]'); // Ensure this gets replaced
-
-        // Catch any remaining placeholders that might have failed replacement or have default values
-        finalText = finalText.replace(/\$\{\s*area\s*(\|\|.*?)?\s*\}/g, data.area || '[N/A]');
-        finalText = finalText.replace(/\$\{\s*acres\s*(\|\|.*?)?\s*\}/g, data.acres || '[N/A]');
-        // ... add similar lines for other critical placeholders if defaults aren't working ...
-        // General fallback for any missed placeholders
-        finalText = finalText.replace(/\$\{\s*\w+\s*(\|\|.*?)?\s*\}/g, '[N/A]');
-
-        finalText = finalText.trim();
-        return finalText;
-    }
-
-
-    // --- Download and Filename Functions ---
-    function downloadTextFile(content, filename) {
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    function downloadBlob(blob, filename) { // Helper for Blob downloads (ZIP, potentially TXT)
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = filename;
@@ -847,6 +317,260 @@ ATTACHED REFERENCE PDFS:
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
+        console.log(`Blob download initiated for: ${filename}`);
+    }
+    function downloadTextFile(content, filename) { // Helper specifically for TXT download
+        console.log(`Attempting text download for: ${filename}`);
+        try {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            downloadBlob(blob, filename); // Reuse blob downloader
+        } catch (error) {
+            console.error("Error in downloadTextFile:", error);
+            alert("Error creating text file for download. See console.");
+        }
+    }
+
+    // --- Placeholder Processing ---
+    function processPlaceholders(text, placeholderStorage, selectedCounty, nrcsData) {
+        const placeholderRegex = /\[\[(.*?)\]\]/g;
+        let processedText = text; let continueProcessing = true;
+        const uniquePlaceholdersInThisText = new Map();
+        const matches = Array.from(text.matchAll(placeholderRegex)).map(match => ({
+            full: match[0], innerTrimmed: match[1].trim()
+        }));
+
+        for (const matchInfo of matches) {
+            if (!continueProcessing) break;
+            const placeholderText = matchInfo.innerTrimmed;
+            if (uniquePlaceholdersInThisText.has(placeholderText)) continue;
+
+            let valueForThisBlock = null;
+            if (placeholderText === "(Insert County Name)") {
+                valueForThisBlock = selectedCounty || `[[${placeholderText}]]`;
+            } else if (placeholderText === "(Insert NRCS Phone Number)") {
+                valueForThisBlock = (selectedCounty && nrcsData[selectedCounty]) ? nrcsData[selectedCounty] : `[[${placeholderText}]]`;
+            } else {
+                const storedGenericValue = placeholderStorage[placeholderText];
+                if (storedGenericValue !== undefined) {
+                    if (storedGenericValue === null) {
+                         console.warn(`Placeholder "${placeholderText}" previously cancelled.`);
+                         continueProcessing = false; break;
+                    }
+                    valueForThisBlock = storedGenericValue;
+                } else {
+                    const userInput = prompt(`Please provide value for:\n"${placeholderText}"`);
+                    if (userInput === null) {
+                        console.warn(`User cancelled prompt for "${placeholderText}"`);
+                        continueProcessing = false; placeholderStorage[placeholderText] = null; // Store cancellation
+                        break;
+                    } else {
+                        valueForThisBlock = userInput; placeholderStorage[placeholderText] = valueForThisBlock;
+                    }
+                }
+            }
+            uniquePlaceholdersInThisText.set(placeholderText, valueForThisBlock);
+        }
+
+        if (continueProcessing) {
+            uniquePlaceholdersInThisText.forEach((userInput, placeholderText) => {
+                const escapedPlaceholderText = placeholderText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                processedText = processedText.replace(new RegExp(`\\[\\[\\s*${escapedPlaceholderText}\\s*\\]\\]`, 'g'), userInput);
+            });
+            return { text: processedText, cancelled: false };
+        } else {
+            return { text: text, cancelled: true };
+        }
+    }
+
+    // --- Recommendation Text Area Regeneration ---
+    function regenerateRecTextarea() {
+        let output = []; let processingErrorOccurred = false;
+        const currentSelectedCounty = nrcsCountySelect ? nrcsCountySelect.value : "";
+
+        if (Object.keys(flatRecList).length === 0 && typeof allRecommendations !== 'undefined' && allRecommendations && Object.keys(allRecommendations).length > 0) {
+             console.warn("Regenerate: flatRecList empty, repopulating...");
+             Object.values(allRecommendations).forEach(cat => Array.isArray(cat) && cat.forEach(rec => { if(rec?.title) flatRecList[rec.title] = rec.text || ''; }));
+        } else if (Object.keys(flatRecList).length === 0) {
+            console.warn("Regenerate: Cannot proceed, flatRecList empty or recommendations missing.");
+            if(recTextarea) recTextarea.value = '[Recommendations not loaded or empty]'; return;
+        }
+
+        selectedRecTitles.forEach(title => {
+            if (processingErrorOccurred) return;
+            const originalText = flatRecList[title];
+            if (originalText !== undefined) {
+                const { text: processedText, cancelled } = processPlaceholders(originalText, placeholderValues, currentSelectedCounty, countyNrcsInfo);
+                if (!cancelled) { output.push(processedText); }
+                else {
+                    console.error(`Regenerate: Placeholder cancelled for "${title}". Removing.`);
+                    processingErrorOccurred = true;
+                    document.querySelector(`.rec-button[data-title="${title}"]`)?.classList.remove('selected');
+                }
+            } else { output.push(`[Error: Text missing for "${title}"]`); }
+        });
+
+        if (processingErrorOccurred) {
+            selectedRecTitles = selectedRecTitles.filter(title => document.querySelector(`.rec-button[data-title="${title}"]`)?.classList.contains('selected'));
+        }
+        if(recTextarea) {
+            recTextarea.value = output.join('\n\n');
+            recTextarea.scrollTop = recTextarea.scrollHeight;
+        } else { console.error("Recommendation textarea not found during regeneration."); }
+    }
+
+    // --- UI Population Functions ---
+    function populateCountyDropdown() {
+        if (!nrcsCountySelect) { console.error("County select not found."); return; }
+        while (nrcsCountySelect.options.length > 1) nrcsCountySelect.remove(1);
+        Object.keys(countyNrcsInfo).sort().forEach(name => { nrcsCountySelect.add(new Option(name, name)); });
+        console.log("County dropdown populated.");
+    }
+    function populatePdfCheckboxes() {
+        if (!pdfCheckboxesContainer) { console.error("PDF checkbox container not found."); return; }
+        pdfCheckboxesContainer.innerHTML = '';
+        referencePdfs.sort((a, b) => a.name.localeCompare(b.name));
+        referencePdfs.forEach(pdf => {
+            const div = document.createElement('div'); div.style.marginBottom = '5px';
+            const safeId = `pdf_${pdf.value.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+            div.innerHTML = `<input type="checkbox" id="${safeId}" name="referencePdf" value="${pdf.value}" style="margin-right: 5px;"><label for="${safeId}" style="margin-right: 10px;">${pdf.name}</label><a href="pdfs/${pdf.value}" target="_blank" rel="noopener noreferrer" style="font-size: 0.85em; text-decoration: none; color: #2E8B57;">[Download]</a>`;
+            pdfCheckboxesContainer.appendChild(div);
+        });
+        console.log("PDF checkboxes populated.");
+    }
+    function populateRecommendationButtons() {
+        if (typeof allRecommendations === 'undefined' || allRecommendations === null || Object.keys(allRecommendations).length === 0) {
+            console.warn("Cannot populate recommendations: data is missing or empty.");
+            if (recButtonsContainer) recButtonsContainer.innerHTML = '<p style="color: orange; font-weight: bold;">No recommendations available.</p>';
+            flatRecList = {}; return;
+        }
+        if (!recButtonsContainer) { console.error("Recommendation button container not found."); return; }
+        recButtonsContainer.innerHTML = ''; flatRecList = {};
+        try {
+            Object.entries(allRecommendations).forEach(([category, recs]) => {
+                if (!Array.isArray(recs) || recs.length === 0) return;
+                const header = document.createElement('h4'); header.textContent = category; header.className = 'rec-category-header expanded';
+                const group = document.createElement('div'); group.className = 'rec-button-group'; group.style.display = 'flex';
+                recs.forEach(rec => {
+                    if (!rec?.title) { console.warn("Skipping rec without title:", rec); return; }
+                    flatRecList[rec.title] = rec.text || '';
+                    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'rec-button';
+                    btn.textContent = rec.title; btn.dataset.title = rec.title; btn.title = rec.text || '';
+                    if (selectedRecTitles.includes(rec.title)) btn.classList.add('selected');
+                    group.appendChild(btn);
+                });
+                header.addEventListener('click', function() {
+                    const associatedGroup = this.nextElementSibling;
+                    if (associatedGroup?.classList.contains('rec-button-group')) {
+                        const isExpanded = this.classList.toggle('expanded');
+                        associatedGroup.style.display = isExpanded ? 'flex' : 'none';
+                    }
+                });
+                recButtonsContainer.appendChild(header); recButtonsContainer.appendChild(group);
+            });
+             console.log("Recommendation buttons populated.");
+             recButtonsContainer.addEventListener('click', handleRecommendationClick); // Add listener here
+        } catch (e) {
+            console.error("Error populating recommendations:", e);
+            recButtonsContainer.innerHTML = '<p style="color: red; font-weight: bold;">Error loading recommendations.</p>';
+        }
+    }
+
+    // --- Event Handler for Recommendation Button Clicks ---
+    function handleRecommendationClick(event) {
+         const targetButton = event.target;
+         if (targetButton.classList.contains('rec-button')) {
+             const title = targetButton.dataset.title;
+             const isSelected = targetButton.classList.contains('selected');
+             const originalText = flatRecList[title];
+             if (isSelected) {
+                 targetButton.classList.remove('selected');
+                 selectedRecTitles = selectedRecTitles.filter(t => t !== title);
+                 regenerateRecTextarea();
+             } else if (originalText !== undefined) {
+                 if (!selectedRecTitles.includes(title)) selectedRecTitles.push(title);
+                 targetButton.classList.add('selected');
+                 regenerateRecTextarea();
+                 if (!targetButton.classList.contains('selected')) {
+                     console.log(`Selection cancelled for "${title}" during placeholder prompt.`);
+                     targetButton.style.backgroundColor = '#f8d7da'; setTimeout(() => { targetButton.style.backgroundColor = ''; }, 800);
+                 }
+             } else { console.warn(`Cannot select, text missing for: "${title}"`); }
+         }
+     }
+
+    // --- Function to Toggle Soil Details Visibility (Attached to window) ---
+    window.toggleSoilDetails = function(showOption1) {
+        const details1 = document.getElementById('soilDetails1');
+        const details2 = document.getElementById('soilDetails2');
+        if (details1) details1.style.display = showOption1 ? 'block' : 'none';
+        if (details2) details2.style.display = !showOption1 ? 'block' : 'none';
+    };
+
+    // --- Form Data Generation & Download ---
+    function generateFinalText() {
+        console.log("Generating final text...");
+        try {
+            const data = { // Gather all form data
+                area: getElementValue('area'), acres: getElementValue('acres'), majorSpecies: getElementValue('majorSpecies'),
+                selectedSizeClasses: getCheckedValuesArray('sizeClass'), stockingLevel: getElementValue('stockingLevel'),
+                selectedStockingExplanation: getRadioValue('stockingExplanation'), treesPerAcre: getElementValue('treesPerAcre'),
+                avgDbh: getElementValue('avgDbh'), basalArea: getElementValue('basalArea'), standHealth: getElementValue('standHealth'),
+                invasiveSpecies: getElementValue('invasiveSpecies'), healthNotes: getElementValue('healthNotes'),
+                timberQuality: getElementValue('timberQuality'), qualityNotes: getElementValue('qualityNotes'),
+                regenSpecies: getElementValue('regenSpecies'), whiteOakHeight: getElementValue('whiteOakHeight'),
+                blackOakSI: getElementValue('blackOakSI'), yellowPoplarSI: getElementValue('yellowPoplarSI'),
+                siteProductivity: getElementValue('siteProductivity'), soilOption: getRadioValue('soilOption'),
+                soilType: getRadioValue('soilOption') === '1' ? getElementValue('soilType1') : getElementValue('soilType2'),
+                drainage: getRadioValue('soilOption') === '1' ? getElementValue('drainage1') : getElementValue('drainage2'),
+                runoff: getRadioValue('soilOption') === '1' ? getElementValue('runoff1') : getElementValue('runoff2'),
+                permeability: getRadioValue('soilOption') === '1' ? getElementValue('permeability1') : getElementValue('permeability2'),
+                lastHarvestAge: getElementValue('lastHarvestAge'), historyNotes: getElementValue('historyNotes'),
+                wildlifeValue: getRadioValue('wildlifeSuitability'),
+                finalRecommendations: recTextarea?.value.trim() || '[No recommendations added.]',
+                selectedPdfNames: getCheckedValuesArray('referencePdf')
+            };
+
+            // Build composite fields
+            data.sizeClassText = formatListWithCommasAndAnd(data.selectedSizeClasses, '[No size class selected]');
+            data.stockingExplanationText = data.selectedStockingExplanation ? (stockingExplanationDescriptions[data.selectedStockingExplanation] || data.selectedStockingExplanation) : '[No stocking explanation selected]';
+            data.wildlifeSectionText = data.wildlifeValue ? (wildlifeDescriptions[data.wildlifeValue] || data.wildlifeValue) : '[No wildlife condition selected]';
+            data.invasiveTreatmentNote = data.invasiveSpecies ? "Invasive species should be treated as soon as feasible and the area monitored for additional spread." : "";
+            data.selectedPdfs = data.selectedPdfNames.length > 0 ? data.selectedPdfNames.map(filename => `• ${filename}`).join('\n') : '[None Selected]';
+
+            // --- CORRECTED SOIL SECTION TEXT CONSTRUCTION ---
+             const typeLabel = data.soilOption === '1' ? 'type' : 'types';
+             const typeValue = data.soilType || '[N/A]';
+             const drainageValue = data.drainage || '[N/A]';
+             const runoffValue = data.runoff || '[N/A]';
+             const permValue = data.permeability || '[N/A]';
+
+             if (data.soilOption === '1' || data.soilOption === '2') {
+                  // Build the sentence structure correctly here
+                  data.soilSectionText = `The primary soil ${typeLabel} in this area are ${typeValue}. This soil type is ${drainageValue} drained with ${runoffValue} runoff and ${permValue} permeability.`;
+             } else {
+                  data.soilSectionText = '[No soil option selected]';
+             }
+             // --- END CORRECTED SOIL SECTION ---
+
+            // Template substitution
+            let finalText = baseTemplate;
+            const placeholderRegex = /\$\{\s*(\w+)\s*(?:\|\|.*?)*?\s*\}/g;
+            finalText = finalText.replace(placeholderRegex, (match, key) => {
+                const value = data.hasOwnProperty(key) ? data[key] : undefined;
+                const allowEmpty = ['healthNotes', 'qualityNotes', 'historyNotes', 'invasiveTreatmentNote', 'finalRecommendations', 'selectedPdfs'].includes(key);
+                if (value !== undefined && value !== null && value !== '') return value;
+                if (allowEmpty && (value === '' || value === null || value === undefined)) return '';
+                if (key === 'selectedPdfs') return '[None Selected]';
+                if (key === 'soilSectionText') return data.soilSectionText; // Use the constructed value
+                return '[N/A]';
+            });
+
+            console.log("Final text generated successfully.");
+            return finalText.trim();
+        } catch (error) {
+            console.error("Error generating final text:", error);
+            alert("Failed to generate text content. See console."); return null;
+        }
     }
     function generateFilename() {
         const area = getElementValue('area') || 'NoArea';
@@ -859,63 +583,94 @@ ATTACHED REFERENCE PDFS:
     function openModal(modalElement) { if (modalElement) modalElement.style.display = 'block'; }
     function closeModal(modalElement) { if (modalElement) modalElement.style.display = 'none'; }
 
-    // --- Event Listeners for Main Action Buttons ---
-    if(editTemplateButton) {
-        editTemplateButton.addEventListener('click', () => {
-            if(templateEditTextarea) templateEditTextarea.value = baseTemplate;
-            openModal(editTemplateModal);
+    // --- Event Listeners Setup ---
+    function setupEventListeners() {
+        // Main Action Buttons
+        if(editTemplateButton) editTemplateButton.addEventListener('click', () => { if(templateEditTextarea) templateEditTextarea.value = baseTemplate; openModal(editTemplateModal); });
+        if(viewFinalTxtButton) viewFinalTxtButton.addEventListener('click', () => { const finalText = generateFinalText(); if(finalTxtEditTextarea && finalText !== null) finalTxtEditTextarea.value = finalText; openModal(viewFinalTxtModal); });
+        if(submitButton) submitButton.addEventListener('click', () => { const finalText = generateFinalText(); if (finalText !== null) downloadTextFile(finalText, generateFilename()); });
+        else { console.error("Submit button (TXT save) not found!"); }
+
+        // PDF Zip Download Button
+        if (downloadPdfsButton) downloadPdfsButton.addEventListener('click', handlePdfZipDownload);
+        else { console.warn("PDF download button not found."); }
+
+        // Modal Buttons & Interactions
+        if(saveTemplateChangesButton) saveTemplateChangesButton.addEventListener('click', () => { if(templateEditTextarea) baseTemplate = templateEditTextarea.value; closeModal(editTemplateModal); });
+        if(saveFinalTxtButton) saveFinalTxtButton.addEventListener('click', () => { const editedText = finalTxtEditTextarea?.value || ''; downloadTextFile(editedText, generateFilename()); closeModal(viewFinalTxtModal); });
+        if(closeTemplateModalButton) closeTemplateModalButton.addEventListener('click', () => closeModal(editTemplateModal));
+        if(closeFinalTxtModalButton) closeFinalTxtModalButton.addEventListener('click', () => closeModal(viewFinalTxtModal));
+        cancelTemplateModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(editTemplateModal)));
+        cancelFinalTxtModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(viewFinalTxtModal)));
+        window.addEventListener('click', (event) => { if (event.target == editTemplateModal) closeModal(editTemplateModal); if (event.target == viewFinalTxtModal) closeModal(viewFinalTxtModal); });
+
+        // County Dropdown Change
+        if (nrcsCountySelect) nrcsCountySelect.addEventListener('change', regenerateRecTextarea);
+
+        // Stocking Level Dropdown -> Hidden Radios
+        if (stockingLevelDropdown) {
+             stockingLevelDropdown.addEventListener('change', () => {
+                 const targetMap = { 'fully': 'Fully stocked', 'over': 'Over stocked', 'under': 'Under stocked' };
+                 const targetValue = targetMap[stockingLevelDropdown.value] || '';
+                 document.querySelectorAll(`#stockingExplanationRadios input[name="stockingExplanation"]`)
+                     .forEach(radio => { radio.checked = (radio.value === targetValue); });
+             });
+         }
+
+        // Collapsible Notes Toggle Buttons
+         noteToggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const txtArea = button.closest('.collapsible-section')?.querySelector('.notes-textarea');
+                if (txtArea) { const isHidden = txtArea.style.display === 'none'; txtArea.style.display = isHidden ? 'block' : 'none'; button.textContent = isHidden ? '+' : '−'; } // Corrected toggle symbols
+            });
+            const label = button.closest('.collapsible-header')?.querySelector('label');
+            if (label) { label.style.cursor = 'pointer'; label.addEventListener('click', () => button.click()); }
         });
-    }
-    if(viewFinalTxtButton) {
-        viewFinalTxtButton.addEventListener('click', () => {
-            // regenerateRecTextarea(); // Ensure recommendation text is up-to-date before viewing final TXT
-            const finalText = generateFinalText(); // Regenerate the FULL final text
-            if(finalTxtEditTextarea) finalTxtEditTextarea.value = finalText;
-            openModal(viewFinalTxtModal);
-        });
-    }
-    if(submitButton) {
-        submitButton.addEventListener('click', () => {
-            // regenerateRecTextarea(); // Ensure recommendation text is up-to-date before saving
-            const finalText = generateFinalText(); // Regenerate the FULL final text
-            const filename = generateFilename();
-            downloadTextFile(finalText, filename);
-        });
+
+        console.log("All event listeners set up.");
     }
 
-    // --- Event Listeners for Modals ---
-    if(saveTemplateChangesButton) {
-        saveTemplateChangesButton.addEventListener('click', () => {
-            if(templateEditTextarea) baseTemplate = templateEditTextarea.value;
-            console.log("Base template updated.");
-            closeModal(editTemplateModal);
-        });
+    // --- PDF Zip Download Handler ---
+    async function handlePdfZipDownload() {
+        const selectedPdfFiles = getCheckedValuesArray('referencePdf');
+        if (selectedPdfFiles.length === 0) { if (pdfDownloadStatus) pdfDownloadStatus.textContent = 'No PDFs selected.'; setTimeout(() => { if (pdfDownloadStatus) pdfDownloadStatus.textContent = ''; }, 3000); return; }
+        if (typeof JSZip === 'undefined') { if (pdfDownloadStatus) pdfDownloadStatus.textContent = 'Error: Zip library not loaded.'; return; }
+        if (pdfDownloadStatus) pdfDownloadStatus.textContent = `Fetching (0/${selectedPdfFiles.length})...`;
+        if (downloadPdfsButton) downloadPdfsButton.disabled = true;
+        const zip = new JSZip(); let filesFetched = 0; const fetchErrors = [];
+        const fetchPromises = selectedPdfFiles.map(filename => fetch(`pdfs/${filename}`).then(response => { if (!response.ok) throw new Error(`${response.statusText} (${filename})`); return response.blob(); }).then(blob => { filesFetched++; zip.file(filename, blob); return { success: true }; }).catch(error => { console.error(error); fetchErrors.push(filename); return { success: false }; }).finally(() => { if (pdfDownloadStatus) pdfDownloadStatus.textContent = `Fetching (${filesFetched}/${selectedPdfFiles.length})...`; }));
+        await Promise.allSettled(fetchPromises);
+        if (filesFetched === 0) { if (pdfDownloadStatus) pdfDownloadStatus.textContent = 'Failed to fetch any PDFs.'; }
+        else {
+            const statusMsg = fetchErrors.length > 0 ? `Errors fetching: ${fetchErrors.join(', ')}. Zipping...` : 'Zipping files...';
+            if (pdfDownloadStatus) pdfDownloadStatus.textContent = statusMsg;
+            try {
+                const zipBlob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+                downloadBlob(zipBlob, 'selected_forestry_pdfs.zip');
+                if (pdfDownloadStatus) pdfDownloadStatus.textContent = fetchErrors.length > 0 ? 'Partial ZIP Downloaded!' : 'ZIP Downloaded!';
+            } catch (error) { console.error("Error generating ZIP:", error); if (pdfDownloadStatus) pdfDownloadStatus.textContent = 'Error creating ZIP.'; }
+        }
+        if (downloadPdfsButton) downloadPdfsButton.disabled = false;
+        setTimeout(() => { if (pdfDownloadStatus) pdfDownloadStatus.textContent = ''; }, 5000);
     }
-    if(saveFinalTxtButton) {
-        saveFinalTxtButton.addEventListener('click', () => {
-            const editedText = finalTxtEditTextarea ? finalTxtEditTextarea.value : '';
-            const filename = generateFilename();
-            downloadTextFile(editedText, filename);
-            closeModal(viewFinalTxtModal);
-        });
-    }
-    if(closeTemplateModalButton) closeTemplateModalButton.addEventListener('click', () => closeModal(editTemplateModal));
-    if(closeFinalTxtModalButton) closeFinalTxtModalButton.addEventListener('click', () => closeModal(viewFinalTxtModal));
-    cancelTemplateModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(editTemplateModal)));
-    cancelFinalTxtModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(viewFinalTxtModal)));
 
-    // Close modal if clicking outside the content area
-    window.addEventListener('click', (event) => {
-        if (event.target == editTemplateModal) closeModal(editTemplateModal);
-        if (event.target == viewFinalTxtModal) closeModal(viewFinalTxtModal);
-    });
-
-    // --- Event Listener for County Dropdown Change ---
-    if (nrcsCountySelect) {
-        nrcsCountySelect.addEventListener('change', () => {
-            console.log("County selection changed. Regenerating recommendations.");
-            regenerateRecTextarea(); // Regenerate text area when county changes
+    // --- Initialization ---
+    try {
+        populateCountyDropdown();
+        populateRecommendationButtons();
+        populatePdfCheckboxes();
+        const initialSoilValue = getRadioValue('soilOption');
+        toggleSoilDetails(initialSoilValue === '1');
+        if (stockingLevelDropdown) stockingLevelDropdown.dispatchEvent(new Event('change'));
+        noteToggleButtons.forEach(button => {
+            const textarea = button.closest('.collapsible-section')?.querySelector('.notes-textarea');
+            if (textarea) { textarea.style.display = 'none'; button.textContent = '+'; }
         });
+        setupEventListeners();
+        console.log("Forestry Plan App Initialized Successfully.");
+    } catch (error) {
+        console.error("Initialization Error:", error);
+        alert("Error initializing the application. Check console.");
     }
 
 }); // End DOMContentLoaded
