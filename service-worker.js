@@ -5,8 +5,7 @@ const urlsToCache = [
   'style.css',
   'script.js',
   'manifest.json',
-  'icon.png',
-  'icons/icon-512.png'
+  'icon.png'
   // Add any other core assets if needed
 ];
 
