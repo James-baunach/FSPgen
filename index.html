@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <!-- Theme color for browsers -->
     <meta name="theme-color" content="#2E8B57">
+
+    <!-- ADD JSZIP LIBRARY VIA CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH5MO februarik8s+1LsgHUfa3PAum8U52uyk7CDiHMZENhUAnJ2GYpkgHHgzwsKXvrnl6/Nb1vkNgZ4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
@@ -190,50 +193,50 @@
              <div class="radio-group soil-options-container">
                  <!-- Option 1 Column -->
                  <div class="soil-option-column">
-                     <input type="radio" id="soilOption1" name="soilOption" value="1" onclick="toggleSoilDetails(true)">
+                     <input type="radio" id="soilOption1" name="soilOption" value="1" onclick="toggleSoilDetails(true)">  <!-- Ensure onclick is here -->
                      <label for="soilOption1">Option 1: Single Soil</label>
                      <div class="soil-details" id="soilDetails1">
                          <div class="form-row nested-row">
                               <div class="form-group flex-grow-2">
                                   <label for="soilType1">Type:</label>
-                                  <input type="text" id="soilType1" name="soilType1"> <!-- Corresponds to #21 -->
+                                  <input type="text" id="soilType1" name="soilType1">
                               </div>
                              <div class="form-group">
                                  <label for="drainage1">Drainage:</label>
-                                 <input type="text" id="drainage1" name="drainage1" placeholder="well"> <!-- Corresponds to #22 -->
+                                 <input type="text" id="drainage1" name="drainage1" placeholder="well">
                              </div>
                              <div class="form-group">
                                  <label for="runoff1">Runoff:</label>
-                                 <input type="text" id="runoff1" name="runoff1" placeholder="slow"> <!-- Corresponds to #23 -->
+                                 <input type="text" id="runoff1" name="runoff1" placeholder="slow">
                              </div>
                              <div class="form-group">
                                  <label for="permeability1">Perm:</label>
-                                 <input type="text" id="permeability1" name="permeability1" placeholder="mod"> <!-- Corresponds to #24 -->
+                                 <input type="text" id="permeability1" name="permeability1" placeholder="mod">
                             </div>
                          </div>
                     </div>
                  </div>
                  <!-- Option 2 Column -->
                  <div class="soil-option-column">
-                     <input type="radio" id="soilOption2" name="soilOption" value="2" onclick="toggleSoilDetails(false)">
+                     <input type="radio" id="soilOption2" name="soilOption" value="2" onclick="toggleSoilDetails(false)"> <!-- Ensure onclick is here -->
                      <label for="soilOption2">Option 2: Multiple Soils</label>
                       <div class="soil-details" id="soilDetails2">
                          <div class="form-row nested-row">
                               <div class="form-group flex-grow-2">
                                   <label for="soilType2">Types:</label>
-                                  <input type="text" id="soilType2" name="soilType2"> <!-- Corresponds to #21 -->
+                                  <input type="text" id="soilType2" name="soilType2">
                               </div>
                               <div class="form-group">
                                  <label for="drainage2">Drainage:</label>
-                                 <input type="text" id="drainage2" name="drainage2" placeholder="well"> <!-- Corresponds to #22 -->
+                                 <input type="text" id="drainage2" name="drainage2" placeholder="well">
                              </div>
                              <div class="form-group">
                                  <label for="runoff2">Runoff:</label>
-                                 <input type="text" id="runoff2" name="runoff2" placeholder="slow"> <!-- Corresponds to #23 -->
+                                 <input type="text" id="runoff2" name="runoff2" placeholder="slow">
                              </div>
                              <div class="form-group">
                                  <label for="permeability2">Perm:</label>
-                                 <input type="text" id="permeability2" name="permeability2" placeholder="mod"> <!-- Corresponds to #24 -->
+                                 <input type="text" id="permeability2" name="permeability2" placeholder="mod">
                              </div>
                          </div>
                      </div>
@@ -286,7 +289,7 @@
             <legend>Attached Reference PDFs</legend>
             <p class="compact-paragraph">Select the reference PDFs to be associated with this plan:</p>
             <div id="pdfCheckboxesContainer" class="checkbox-group vertical">
-                <!-- Checkboxes will be populated by script.js -->
+                <!-- Checkboxes and download links will be populated by script.js -->
             </div>
         </fieldset>
         <!-- END: Added PDF Selection Fieldset -->
@@ -324,6 +327,10 @@
         <div class="form-actions">
              <button type="button" id="editTemplateButton">Edit Template</button>
              <button type="button" id="viewFinalTxtButton">View Final TXT</button>
+             <!-- ADDED PDF DOWNLOAD BUTTON -->
+             <button type="button" id="downloadPdfsButton">Download Selected PDFs (.zip)</button>
+             <span id="pdfDownloadStatus" style="margin-left: 10px; font-style: italic; color: #555;"></span> <!-- Optional Status Message -->
+             <!-- END ADDED BUTTON -->
              <button type="button" id="submitButton">Save Form as TXT</button> <!-- Changed to type="button" -->
         </div>
 
