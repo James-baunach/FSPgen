@@ -65,7 +65,17 @@ ATTACHED REFERENCE PDFS:
         { name: "Japanese Stiltgrass", value: "Japanese Stiltgrass.pdf" },
         { name: "Callery Pear", value: "Callery Pear.pdf" },
         { name: "Winter Creeper", value: "Winter Creeper.pdf" },
-        { name: "Oriental Bittersweet", value: "Oriental Bittersweet.pdf" }
+        { name: "Oriental Bittersweet", value: "Oriental Bittersweet.pdf" },
+        { name: "Cool Season Grasses", value: "Cool Season Grasses.pdf" },
+        { name: "Cropland Management", value: "Cropland Management.pdf" },
+        { name: "Food Plots", value: "Food Plots.pdf" },
+        { name: "Forest Openings", value: "Forest Openings.pdf" },
+        { name: "Forest Regeneration", value: "Forest Regeneration.pdf" },
+        { name: "Grass and Grain Seed Rate", value: "Grass and Grain Seed Rate.pdf" },
+        { name: "Planting Trees and Shrubs", value: "Planting Trees and Shrubs.pdf" },
+        { name: "Streamside Management", value: "Streamside Management.pdf" },
+        { name: "Timber Stand Improvement", value: "Timber Stand Improvement.pdf" },
+        { name: "Warm Season Grasses", value: "Warm Season Grasses.pdf" },
     ];
 
     // --- Structured Canned Recommendations ---
